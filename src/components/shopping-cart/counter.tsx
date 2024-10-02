@@ -22,7 +22,7 @@ const getApiCounter = async () => {
   return data;
 };
 
-export const CartCounter: React.FC<Props> = ({ initialValue }) => {
+export const CartCounter: React.FC<Props> = () => {
   const counter = useAppSelector((state) => state.counterReducer.counter);
   const dispatch = useAppDispatch();
 

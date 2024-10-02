@@ -1,14 +1,27 @@
+"use client";
 import { ISinglePokemon } from "@/app/dashboard/pokemons/interfaces/single-pokemon";
+import { useAppSelector } from "@/store";
+import { toogleFavorite } from "@/store/pokemons/pokemons";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { IoHeartOutline } from "react-icons/io5";
+import { IoHeart, IoHeartOutline } from "react-icons/io5";
+import { useDispatch } from "react-redux";
 
 type Props = {
   pokemon: ISinglePokemon;
 };
 
 export const PokemonCard: React.FC<Props> = ({ pokemon }) => {
+  const isFavorite = useAppSelector((state) =>
+    Boolean(state.pokemons[pokemon.id])
+  );
+  const dispatch = useDispatch();
+
+  const onToggle = () => {
+    dispatch(toogleFavorite(pokemon));
+  };
+
   return (
     <div className="mx-auto right-0 mt-2 w-60">
       <div className="flex flex-col bg-white rounded overflow-hidden shadow-lg">
@@ -35,20 +48,19 @@ export const PokemonCard: React.FC<Props> = ({ pokemon }) => {
           </div>
         </div>
         <div className="border-b">
-          <Link
-            href="/dashboard/main"
-            className="px-4 py-2 hover:bg-gray-100 flex"
+          <div
+            onClick={onToggle}
+            className="px-4 py-2 hover:bg-gray-100 flex cursor-pointer"
           >
             <div className="flex flex-col items-center justify-center text-green-600">
-              <IoHeartOutline />
+              {isFavorite ? <IoHeart /> : <IoHeartOutline />}
             </div>
             <div className="pl-3">
               <p className="text-sm font-medium text-gray-800 leading-none">
-                No es favorito
+                {isFavorite ? "It's favorite" : "It's not favorite"}
               </p>
-              <p className="text-xs text-gray-500">View your campaigns</p>
             </div>
-          </Link>
+          </div>
         </div>
       </div>
     </div>
