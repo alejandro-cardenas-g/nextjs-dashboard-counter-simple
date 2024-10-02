@@ -27,7 +27,7 @@ export const PokemonCard: React.FC<Props> = ({ pokemon }) => {
           <p className="text-sm text-gray-100 capitalize">{pokemon.name}</p>
           <div className="mt-5">
             <Link
-              href={`/dashboard/pokemon/${pokemon.id}`}
+              href={`/dashboard/pokemons/${pokemon.name}`}
               className="border rounded-full py-2 px-4 text-xs font-semibold text-gray-100"
             >
               More info.

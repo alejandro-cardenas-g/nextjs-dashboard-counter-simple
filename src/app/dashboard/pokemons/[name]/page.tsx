@@ -2,13 +2,28 @@ import { PokemonDetail } from "@/pokemon/interfaces/pokemonDetail";
 import { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { PokemonsResponse } from "../interfaces/pokemons-response";
 
 type Props = {
-  params: { id: string };
+  params: { name: string };
 };
 
-const getPokemonById = async (id: string) => {
-  const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`, {
+export async function generateStaticParams() {
+  try {
+    const pokemons: PokemonsResponse = await fetch(
+      `https://pokeapi.co/api/v2/pokemon?limit=150&offset=0`
+    ).then((res) => res.json());
+    const static151Pokemons = pokemons.results.map((pokemon) => ({
+      name: pokemon.name,
+    }));
+    return static151Pokemons;
+  } catch {
+    return [];
+  }
+}
+
+const getPokemonByName = async (name: string) => {
+  const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`, {
     // cache: "force-cache",
     next: {
       revalidate: 60 * 60 * 2,
@@ -19,16 +34,9 @@ const getPokemonById = async (id: string) => {
   return pokemon;
 };
 
-export async function generateStaticParams() {
-  const static151Pokemons = Array.from({ length: 151 }).map((v, index) => ({
-    id: `${index + 1}`,
-  }));
-  return static151Pokemons;
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
-    const { name } = await getPokemonById(params.id);
+    const { name } = await getPokemonByName(params.name);
     return {
       title: `${name}`,
       description: `${name}`,
@@ -42,7 +50,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PokemonPage({ params }: Props) {
-  const pokemon = await getPokemonById(params.id);
+  const pokemon = await getPokemonByName(params.name);
   return (
     <div className="flex mt-5 flex-col items-center text-slate-800">
       <div className="relative flex flex-col items-center rounded-[20px] w-[700px] mx-auto bg-white bg-clip-border  shadow-lg  p-3">

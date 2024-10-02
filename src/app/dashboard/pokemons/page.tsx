@@ -1,6 +1,7 @@
 import { PokemonGrid } from "@/components";
 import { PokemonsResponse } from "./interfaces/pokemons-response";
 import { ISinglePokemon } from "./interfaces/single-pokemon";
+import { Metadata } from "next";
 
 const getPokemons = async (
   limit: number = 20,
@@ -13,6 +14,11 @@ const getPokemons = async (
     id: pokemon.url.split("/").at(-2) ?? "",
     name: pokemon.name,
   }));
+};
+
+export const metadata: Metadata = {
+  title: "Pokemons",
+  description: "Pokemons list",
 };
 
 export default async function PokemonsPage() {
