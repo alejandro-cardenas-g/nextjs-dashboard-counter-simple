@@ -1,6 +1,12 @@
-import React from "react";
+import { WidgetsGrid } from "@/components";
 export { metadata } from "./metadata";
 
 export default function MainPage() {
-  return <div>main page</div>;
+  return (
+    <div className="text-black">
+      <h1 className="mt-2 text-3xl">Dashboard</h1>
+      <span className="text-xl">Información general</span>
+      <WidgetsGrid />
+    </div>
+  );
 }
